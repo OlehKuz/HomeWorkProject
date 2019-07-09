@@ -101,20 +101,27 @@ namespace EfCoreSample.Controllers
             return NoContent();
         }
         // DELETE api/values/5
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<ActionResult> Delete(long id)
-        {
+        {  
             var exists = await _dbService.AnyAsync(id);
             if (!exists) return NotFound();
             var result = await _dbService.DeleteAsync(id);
             if (!result.Success) return StatusCode(StatusCodes.Status500InternalServerError, result.Message);
             return NoContent();
+           /* }
+            catch ( Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }*/
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(long id, ProjectDTO projectDTO)
         {
             if (projectDTO == null) return BadRequest("No entity provided");
+            if (!id.Equals(projectDTO.Id)) return BadRequest("Differing ids");
             var entity = _mapper.Map<Project>(projectDTO);
             var exists = await _dbService.AnyAsync(entity.Id);
             if (!exists) return NotFound();           

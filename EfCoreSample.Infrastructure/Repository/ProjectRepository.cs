@@ -94,8 +94,9 @@ namespace EfCoreSample.Infrastructure.Repository
         public bool Remove(Project item)
         {
             var exists = _context.Projects.Find(item.Id);
-            if (exists == null) return false;          
-            _context.Projects.Remove(item);
+            if (exists == null) return false;
+            _context.Entry(exists).State = EntityState.Deleted;
+            //_context.Projects.Remove(item);
             _context.SaveChanges();
             return true;            
         }
@@ -104,8 +105,8 @@ namespace EfCoreSample.Infrastructure.Repository
         {
             var project = _context.Projects.Find(key);
             if (project == null) return false;
-            
-            _context.Projects.Remove(project);
+            _context.Entry(project).State = EntityState.Deleted;
+            //_context.Projects.Remove(project);
             _context.SaveChanges();
             return true;
         }
