@@ -61,10 +61,10 @@ namespace EfCoreSample.Controllers
         // GET api/values/5
         // GET api/values/5
         [HttpGet("{id}/members")]
-        public async Task<ActionResult<List<EmployeeDTO>>> Get(long id, bool members = true)
+        public ActionResult<List<EmployeeDTO>> Get(long id, bool members = true)
         {
             
-                var entity = await _dbService.GetRelated<Employee>(id);
+                var entity = _dbService.GetRelated(id);
                 if (entity == null) return NotFound();
                 return _mapper.Map<List<EmployeeDTO>>(entity);
            

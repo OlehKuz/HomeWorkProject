@@ -1,4 +1,5 @@
-﻿using EfCoreSample.Doman.Abstraction;
+﻿using EfCoreSample.Doman;
+using EfCoreSample.Doman.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

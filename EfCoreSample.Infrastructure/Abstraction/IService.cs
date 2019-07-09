@@ -9,6 +9,7 @@ using EfCoreSample.Doman.Abstraction;
 using EfCoreSample.Infrastructure.Services;
 using EfCoreSample.Infrastructure.Services.Communication;
 using EfCoreSample.Doman.Communication;
+using EfCoreSample.Doman;
 
 namespace EfCoreSample.Infrastructure.Abstraction
 {
@@ -28,6 +29,6 @@ namespace EfCoreSample.Infrastructure.Abstraction
 
         Task<Response<TSource>> DeleteAsync(TSource entity);
         Task<bool> AnyAsync(TKey key);
-        Task<List<Typ>> GetRelated<Typ>(TKey key) where Typ:class;
+        List<Employee> GetRelated(TKey key);
     }
 }

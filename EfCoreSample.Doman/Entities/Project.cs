@@ -18,6 +18,5 @@ namespace EfCoreSample.Doman.Entities
         public DateTime EndTime { get; set; }
 
         public ICollection<EmployeeProject> EmployeeProjects { get; set; }
-        public object Employee { get; set; }
     }
 }

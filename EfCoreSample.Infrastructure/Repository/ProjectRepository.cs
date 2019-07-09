@@ -1,4 +1,5 @@
-﻿using EfCoreSample.Doman.Entities;
+﻿using EfCoreSample.Doman;
+using EfCoreSample.Doman.Entities;
 using EfCoreSample.Infrastructure.Abstraction;
 using EfCoreSample.Persistance;
 using Microsoft.EntityFrameworkCore;
@@ -108,11 +109,38 @@ namespace EfCoreSample.Infrastructure.Repository
 
         public List<object> FindRelated(long key)
         {
-            List<object> employees = _context.Projects
-                .Where(pr => pr.Id.Equals(key))
-                .Include(p => p.EmployeeProjects)
-                   .Select(m => m.Employee).ToList();
-            return employees;   
+            /* var project = await _context.Projects.FindAsync(key);
+             if (project != null)
+             {
+                 await _context.Entry(project)
+                     .Collection(p => p.EmployeeProjects).LoadAsync();
+
+             */
+            List<Employee> employees = (from empProj in _context.EmployeeProjects
+                        join proj in _context.Projects
+                        on empProj.ProjectId equals proj.Id
+                        join emp in _context.Employees
+                        on empProj.EmployeeId equals emp.Id
+                        where proj.Id == key
+                        select emp)
+                                     .ToList();
+                       
+
+
+
+            /*_context.Projects
+   .Where(pr => pr.Id.Equals(key))
+   .Include(p => p.EmployeeProjects)
+         .ThenInclude(m => m.Employee)
+         .Select(m=>m.EmployeeProjects)
+   select ep.;*/
+
+            List<object> members = new List<object>();
+            foreach (var m in employees)
+            {
+                members.Add(m);
+            }
+            return members;
          
             /*    .ThanInclude<Project>();
             var project = await _context.Projects.FindAsync(key);

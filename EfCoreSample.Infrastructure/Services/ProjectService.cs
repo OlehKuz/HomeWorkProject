@@ -57,7 +57,7 @@ namespace EfCoreSample.Infrastructure.Services
                 return new Response<Project>($"An error occurred when updating the project: {ex.Message}");
             }
         }
-        public async Task<List<Employee>> GetRelated<Employee>(long id)
+        public List<Employee> GetRelated(long id)
         {
             var members = _repo.FindRelated(id);
             List<Employee> employees = new List<Employee>();
