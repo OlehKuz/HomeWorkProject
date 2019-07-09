@@ -48,7 +48,7 @@ namespace EfCoreSample
             services.AddScoped<IRepository<Project, long>, ProjectRepository>();
             services.AddScoped<IService<Project, long>, ProjectService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddAutoMapper(typeof(Startup), typeof(Project), typeof(Employee));
+            services.AddAutoMapper(typeof(Startup), typeof(Project), typeof(Employee), typeof(EmployeeProject));
             /*var config = new AutoMapper.MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<ProjectDTO, Project>()

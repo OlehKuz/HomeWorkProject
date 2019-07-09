@@ -22,13 +22,8 @@ namespace EfCoreSample.Infrastructure.Repository
         }
         public async Task<Project> FindAsync(long key)
         {
-            var project = await _context.Projects.FindAsync(key);
-            /*if (project != null)
-            {
-                await _context.Entry(project)
-                    .Collection(p => p.EmployeeProjects).LoadAsync();                
-            }*/
-            return project;
+            return await _context.Projects.FindAsync(key);
+            
         }
 
         public async Task<IEnumerable<Project>> GetAsync(Expression<Func<Project, bool>> expression)
@@ -111,6 +106,23 @@ namespace EfCoreSample.Infrastructure.Repository
             return true;
         }
 
-        
+        public List<object> FindRelated(long key)
+        {
+            List<object> employees = _context.Projects
+                .Where(pr => pr.Id.Equals(key))
+                .Include(p => p.EmployeeProjects)
+                   .Select(m => m.Employee).ToList();
+            return employees;   
+         
+            /*    .ThanInclude<Project>();
+            var project = await _context.Projects.FindAsync(key);
+            if (project != null)
+            {
+                await _context.Entry(project)
+                    .Collection(p => p.EmployeeProjects).LoadAsync();
+            }*/
+        }
+
+       
     }
 }

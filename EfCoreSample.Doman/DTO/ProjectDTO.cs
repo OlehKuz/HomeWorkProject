@@ -23,6 +23,5 @@ namespace EfCoreSample.Doman.DTO
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
 
-        public ICollection<EmployeeProject> EmployeeProjects { get; set; }
     }
 }

@@ -23,6 +23,7 @@ namespace EfCoreSample.Doman.AutoMapper
                     .ForMember(dest => dest.Status,
                         src => src.MapFrom(s => EnumExtention.GetEnumValueFromDescription<EProjectStatus>(s.Status)));
 
+            CreateMap<Project, ProjectDTO>().ReverseMap();
         }
 
     }

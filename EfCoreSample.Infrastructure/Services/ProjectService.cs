@@ -9,6 +9,7 @@ using AutoMapper;
 using EfCoreSample.Doman.DTO;
 using EfCoreSample.Doman.Communication;
 using EfCoreSample.Infrastructure.Services.Communication;
+using EfCoreSample.Doman;
 
 namespace EfCoreSample.Infrastructure.Services
 {
@@ -56,7 +57,18 @@ namespace EfCoreSample.Infrastructure.Services
                 return new Response<Project>($"An error occurred when updating the project: {ex.Message}");
             }
         }
-
+        public async Task<List<Employee>> GetRelated<Employee>(long id)
+        {
+            var members = _repo.FindRelated(id);
+            List<Employee> employees = new List<Employee>();
+            foreach (var memb in members)
+            {
+                if(memb is Employee)
+                
+                employees.Add((Employee)memb);
+            }
+            return employees;
+        }
         public async Task<Project> FindAsync(long key) 
         {                      
             return await _repo.FindAsync(key);

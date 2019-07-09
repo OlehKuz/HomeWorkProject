@@ -16,5 +16,6 @@ namespace EfCoreSample.Infrastructure.Abstraction
         TEntity Update(TEntity item);
         bool Remove(TEntity item);
         bool Remove(TKey key);
+        List<object> FindRelated(TKey key);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EfCoreSample.Doman;
 using EfCoreSample.Doman.DTO;
 using EfCoreSample.Doman.Entities;
 using EfCoreSample.Infrastructure.Abstraction;
@@ -46,15 +47,26 @@ namespace EfCoreSample.Controllers
             }
         }
 
-        // GET api/values/5
-        // GET api/values/5
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ProjectDTO>> Get(long id)
         {
+
+            var entity = await _dbService.FindAsync(id);
+            if (entity == null) return NotFound();
+            return _mapper.Map<ProjectDTO>(entity);
+
+        }
+
+        // GET api/values/5
+        // GET api/values/5
+        [HttpGet("{id}/members")]
+        public async Task<ActionResult<List<EmployeeDTO>>> Get(long id, bool members = true)
+        {
             
-                var entity = await _dbService.FindAsync(id);
+                var entity = await _dbService.GetRelated<Employee>(id);
                 if (entity == null) return NotFound();
-                return _mapper.Map<ProjectDTO>(entity);
+                return _mapper.Map<List<EmployeeDTO>>(entity);
            
         }
 
@@ -109,17 +121,12 @@ namespace EfCoreSample.Controllers
             var result = await _dbService.DeleteAsync(id);
             if (!result.Success) return StatusCode(StatusCodes.Status500InternalServerError, result.Message);
             return NoContent();
-           /* }
-            catch ( Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }*/
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(long id, ProjectDTO projectDTO)
         {
+            //TODO it doesnt check if passed item content correstponds to item we deleted, checks only id
             if (projectDTO == null) return BadRequest("No entity provided");
             if (!id.Equals(projectDTO.Id)) return BadRequest("Differing ids");
             var entity = _mapper.Map<Project>(projectDTO);
