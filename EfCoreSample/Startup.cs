@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using EfCoreSample.Infrastructure;
 using AutoMapper;
-
+using Microsoft.OpenApi.Models;
 using System.IO;
 using EfCoreSample.Infrastructure.Abstraction;
 using EfCoreSample.Infrastructure.Repository;
@@ -17,6 +17,8 @@ using EfCoreSample.Infrastructure.Services;
 using EfCoreSample.Doman;
 using EfCoreSample.Doman.DTO;
 using EfCoreSample.Infrastructure.Extensions;
+using System;
+using System.Reflection;
 
 namespace EfCoreSample
 {
@@ -49,14 +51,15 @@ namespace EfCoreSample
             services.AddScoped<IService<Project, long>, ProjectService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(typeof(Startup), typeof(Project), typeof(Employee), typeof(EmployeeProject));
-            /*var config = new AutoMapper.MapperConfiguration(cfg =>
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            services.AddSwaggerGen(c =>
             {
-                cfg.CreateMap<ProjectDTO, Project>()
-                    .ForMember(dest => dest.Status,
-                        src => src.MapFrom(s => s.ToDescriptionString()));
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Project API", Version = "v1" });
+                c.IncludeXmlComments(xmlPath);
             });
-            var mapper = config.CreateMapper();
-            services.AddSingleton(mapper);*/
+            
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +69,13 @@ namespace EfCoreSample
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("./swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty;
+            });
+
             app.UseMvc();
             app.EnsureContextMigrated<EfCoreSampleDbContext>();
             //TODO change this seed method, remove EfCoreSampleDbContext from configure method

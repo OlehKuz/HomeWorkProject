@@ -92,7 +92,6 @@ namespace EfCoreSample.Infrastructure.Repository
             var exists = _context.Projects.Find(item.Id);
             if (exists == null) return false;
             _context.Entry(exists).State = EntityState.Deleted;
-            //_context.Projects.Remove(item);
             _context.SaveChanges();
             return true;            
         }
@@ -102,38 +101,19 @@ namespace EfCoreSample.Infrastructure.Repository
             var project = _context.Projects.Find(key);
             if (project == null) return false;
             _context.Entry(project).State = EntityState.Deleted;
-            //_context.Projects.Remove(project);
             _context.SaveChanges();
             return true;
         }
 
         public List<object> FindRelated(long key)
         {
-            /* var project = await _context.Projects.FindAsync(key);
-             if (project != null)
-             {
-                 await _context.Entry(project)
-                     .Collection(p => p.EmployeeProjects).LoadAsync();
-
-             */
             List<Employee> employees = (from empProj in _context.EmployeeProjects
                         join proj in _context.Projects
                         on empProj.ProjectId equals proj.Id
                         join emp in _context.Employees
                         on empProj.EmployeeId equals emp.Id
                         where proj.Id == key
-                        select emp)
-                                     .ToList();
-                       
-
-
-
-            /*_context.Projects
-   .Where(pr => pr.Id.Equals(key))
-   .Include(p => p.EmployeeProjects)
-         .ThenInclude(m => m.Employee)
-         .Select(m=>m.EmployeeProjects)
-   select ep.;*/
+                        select emp).ToList();
 
             List<object> members = new List<object>();
             foreach (var m in employees)
@@ -141,16 +121,6 @@ namespace EfCoreSample.Infrastructure.Repository
                 members.Add(m);
             }
             return members;
-         
-            /*    .ThanInclude<Project>();
-            var project = await _context.Projects.FindAsync(key);
-            if (project != null)
-            {
-                await _context.Entry(project)
-                    .Collection(p => p.EmployeeProjects).LoadAsync();
-            }*/
         }
-
-       
     }
 }

@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace EfCoreSample.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProjectController : ControllerBase
@@ -31,7 +32,7 @@ namespace EfCoreSample.Controllers
             _mapper = mapper;
         }
 
-        // GET api/values
+        // GET api/Project
         [HttpGet]
         public async Task<ActionResult<List<ProjectDTO>>> Get()
         {
@@ -44,33 +45,45 @@ namespace EfCoreSample.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
                 "Database Failure");
-            }
+            }
         }
 
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProjectDTO>> Get(long id)
         {
-
             var entity = await _dbService.FindAsync(id);
             if (entity == null) return NotFound();
             return _mapper.Map<ProjectDTO>(entity);
-
         }
 
-        // GET api/values/5
-        // GET api/values/5
+        /// <summary>
+        /// Retrieves Employees that are Members of selected project
+        /// </summary>
         [HttpGet("{id}/members")]
         public ActionResult<List<EmployeeDTO>> Get(long id, bool members = true)
-        {
-            
-                var entity = _dbService.GetRelated(id);
-                if (entity == null) return NotFound();
-                return _mapper.Map<List<EmployeeDTO>>(entity);
-           
+        {    
+            var entity = _dbService.GetRelated(id);
+            if (entity == null) return NotFound();
+            return _mapper.Map<List<EmployeeDTO>>(entity);
+
         }
 
-        // POST api/values
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST api/Project
+        ///     "title": "Title post project",
+        ///     "status": "Pending",
+        ///     "lastUpdated": "2019-07-09",
+        ///     "startTime": "2019-07-06",
+        ///     "endTime": "2019-08-25"
+        ///
+        /// </remarks>
+        /// 
+        /// <returns>A newly created Project</returns>
+        /// <response code="201">Returns the newly created project</response>
+        /// <response code="400">If the item is null</response> 
         [HttpPost]
         public async Task<ActionResult<ProjectDTO>> Post(SaveProjectDTO saveDto)
         {
@@ -83,9 +96,9 @@ namespace EfCoreSample.Controllers
             var posted = result.Entity;
             return Created(_link.GetPathByAction("Get", "Project", new { posted.Id }), posted);
         }
-    
 
-        // PUT api/values/5
+
+        // PUT api/Project/5
         [HttpPut("{id:long}")]
         public async Task<ActionResult> Put(long id, ProjectDTO projectDTO)
         {
@@ -100,7 +113,7 @@ namespace EfCoreSample.Controllers
             return NoContent();
         }
 
-        // PUT api/values/5
+        // PUT api/Project/5
         [HttpPut]
         public async Task<ActionResult> Put(List<ProjectDTO> projectDTO)
         {
@@ -112,8 +125,12 @@ namespace EfCoreSample.Controllers
             if (!result.Success) return StatusCode(StatusCodes.Status500InternalServerError, result.Message);
             return NoContent();
         }
-        // DELETE api/values/5
-        [HttpDelete("delete/{id}")]
+
+        /// <summary>
+        /// Deletes a specific Project.
+        /// </summary>
+        /// <param name="id"></param>
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(long id)
         {  
             var exists = await _dbService.AnyAsync(id);
@@ -123,8 +140,11 @@ namespace EfCoreSample.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(long id, ProjectDTO projectDTO)
+        /// <summary>
+        /// Deletes a supplied Project.
+        /// </summary>
+        [HttpDelete("{id}/project")]
+        public async Task<ActionResult> Delete(long id, ProjectDTO projectDTO) 
         {
             //TODO it doesnt check if passed item content correstponds to item we deleted, checks only id
             if (projectDTO == null) return BadRequest("No entity provided");
