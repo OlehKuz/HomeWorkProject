@@ -29,6 +29,6 @@ namespace EfCoreSample.Infrastructure.Abstraction
 
         Task<Response<TSource>> DeleteAsync(TSource entity);
         Task<bool> AnyAsync(TKey key);
-        List<Employee> GetRelated(TKey key);
+        List<Typ> GetRelated<Typ>(TKey key);
     }
 }

@@ -63,7 +63,7 @@ namespace EfCoreSample.Controllers
         [HttpGet("{id}/members")]
         public ActionResult<List<EmployeeDTO>> Get(long id, bool members = true)
         {    
-            var entity = _dbService.GetRelated(id);
+            var entity = _dbService.GetRelated<Employee>(id);
             if (entity == null) return NotFound();
             return _mapper.Map<List<EmployeeDTO>>(entity);
 

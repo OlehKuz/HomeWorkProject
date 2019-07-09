@@ -57,7 +57,7 @@ namespace EfCoreSample.Infrastructure.Services
                 return new Response<Project>($"An error occurred when updating the project: {ex.Message}");
             }
         }
-        public List<Employee> GetRelated(long id)
+        public List<Employee> GetRelated<Employee>(long id)
         {
             var members = _repo.FindRelated(id);
             List<Employee> employees = new List<Employee>();
