@@ -17,6 +17,8 @@ namespace EfCoreSample.Persistance.EntityConfiguration
             projectBuilder.Property(p => p.Title).HasMaxLength(byte.MaxValue).IsRequired();
             projectBuilder.Property(p => p.Description).HasMaxLength(int.MaxValue);
             projectBuilder.Property(p => p.Status).HasMaxLength(10).IsRequired();
+            projectBuilder.Property(p => p.StartTime).HasColumnType("Date");
+            projectBuilder.Property(p => p.EndTime).HasColumnType("Date");
             projectBuilder.Property(p => p.LastUpdated)
                 .HasDefaultValueSql("current_timestamp(6) ON UPDATE current_timestamp(6)")
                 .ValueGeneratedOnAddOrUpdate();

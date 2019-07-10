@@ -11,7 +11,7 @@ namespace EfCoreSample.Doman.DTO
         public string Title { get; set; }
         //define status property based on current time and starttime, endtime properties
         //in a service
-
+        public string Description { get; set; }
         public EProjectStatus Status { get; set; }
 
         internal object ToDescriptionString()

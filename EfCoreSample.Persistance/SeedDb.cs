@@ -21,13 +21,33 @@ namespace EfCoreSample.Persistance
                     {
                         Title = "Title project1",
                         Status = "Pending",
-                        StartTime = new DateTime(2019, 7, 30),
+                         Description = "Project to do",
+                        StartTime = new DateTime(2019, 8, 6),
                         EndTime = new DateTime(2019, 8, 30)
+                    },
+                    
+                    new Project
+                    {
+                        Title = "Another project",
+                        Status = "InProgress",
+                        Description = "Select members",
+                        StartTime = new DateTime(2019, 8, 6),
+                        EndTime = new DateTime(2019, 8, 25)
+                    },
+
+                    new Project
+                    {
+                        Title = "Program",
+                        Status = "InProgress",
+                        Description = "Doing now and cant wait to finish",
+                        StartTime = new DateTime(2019, 7, 6),
+                        EndTime = new DateTime(2019, 8, 25)
                     },
                     new Project
                     {
-                        Title = "Title project2",
+                        Title = "Video",
                         Status = "Cancelled",
+                        Description = "Found Indian programer",
                         StartTime = new DateTime(2019, 7, 6),
                         EndTime = new DateTime(2019, 8, 25)
                     }
@@ -165,10 +185,14 @@ namespace EfCoreSample.Persistance
                 {
                     var projectId1 = context.Projects.First().Id;
                     var projectId2 = long.MinValue;
+                    var projectId3 = long.MinValue;
 
                     var project = context.Projects.Skip(1).FirstOrDefault();
                     if (project != null) projectId2 = project.Id;
                     else projectId2 = projectId1;
+                    project = context.Projects.Skip(2).FirstOrDefault();
+                    if (project != null) projectId3 = project.Id;
+                    else projectId3 = projectId2;
 
                     var employeeProjects = new List<EmployeeProject>
                     {
@@ -187,6 +211,11 @@ namespace EfCoreSample.Persistance
                         {
                             EmployeeId = employeeId3,
                             ProjectId = projectId1
+                        },
+                        new EmployeeProject
+                        {
+                            EmployeeId = employeeId3,
+                            ProjectId = projectId3
                         }
                     };
                     context.EmployeeProjects.AddRange(employeeProjects);

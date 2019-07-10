@@ -3,14 +3,16 @@ using System;
 using EfCoreSample.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EfCoreSample.Persistance.Migrations
 {
     [DbContext(typeof(EfCoreSampleDbContext))]
-    partial class EfCoreSampleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190710093740_date")]
+    partial class date
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
