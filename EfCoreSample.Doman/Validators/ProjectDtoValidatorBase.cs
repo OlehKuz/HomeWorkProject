@@ -11,7 +11,7 @@ namespace EfCoreSample.Doman.Validators
     {
         public ProjectDtoValidatorBase()
         {
-            RuleFor(project => project.Title).NotNull().Length(1, 255);
+            RuleFor(project => project.Title).NotNull().Length(1, 50);
             RuleFor(project => project.Description).Length(0, 255);
            
             RuleFor(project => project.StartTime)

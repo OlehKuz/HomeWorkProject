@@ -19,6 +19,8 @@ using EfCoreSample.Doman.DTO;
 using EfCoreSample.Infrastructure.Extensions;
 using System;
 using System.Reflection;
+using FluentValidation.AspNetCore;
+using EfCoreSample.Doman.Validators;
 
 namespace EfCoreSample
 {
@@ -42,7 +44,11 @@ namespace EfCoreSample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddFluentValidation(fv => 
+                    fv.RegisterValidatorsFromAssemblyContaining<ProjectValidatorPut>()
+                    .RunDefaultMvcValidationAfterFluentValidationExecutes = false);
 
 
             services.AddDbContext<EfCoreSampleDbContext>(options =>

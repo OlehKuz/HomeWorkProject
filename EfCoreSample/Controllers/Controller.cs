@@ -4,13 +4,14 @@ using EfCoreSample.Doman.DTO;
 using EfCoreSample.Doman.Entities;
 using EfCoreSample.Infrastructure.Abstraction;
 using EfCoreSample.Infrastructure.Extensions;
-using EfCoreSample.Infrastructure.Services;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace EfCoreSample.Controllers
@@ -82,8 +83,9 @@ namespace EfCoreSample.Controllers
         public async Task<ActionResult<ProjectGetDto>> Post(ProjectPostDto saveDto)
         {
             if (saveDto == null) return BadRequest("No entity provided");
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState.GetErrorMessages());
+            if (!ModelState.IsValid) return BadRequest(ModelState.GetErrorMessages());
+            //return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+
             var entity = _mapper.Map<Project>(saveDto);
             var result = await _dbService.InsertAsync(entity);
             if(!result.Success)return StatusCode(StatusCodes.Status500InternalServerError,result.Message);
