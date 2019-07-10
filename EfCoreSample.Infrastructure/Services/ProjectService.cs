@@ -99,36 +99,30 @@ namespace EfCoreSample.Infrastructure.Services
 
         public async Task<Response<Project>> DeleteAsync(long key)
         {
-            try
+            if (!_repo.FindAsync(key)
+                    .Result.Status.Equals(EnumExtention
+                    .GetDescriptionFromEnumValue(EProjectStatus.InProgress)))
             {
-                using (var dbContext = new DbContextFactory().CreateDbContext(new string[] { }))
+                try
                 {
-                    var success =_repo.Remove(key);
-                    await dbContext.SaveChangesAsync();
-                    return new Response<Project>(success);
+                    using (var dbContext = new DbContextFactory().CreateDbContext(new string[] { }))
+                    {
+                        var success = _repo.Remove(key);
+                        await dbContext.SaveChangesAsync();
+                        return new Response<Project>(success);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return new Response<Project>($"An error occurred when saving the delete: {ex.Message}");
                 }
             }
-            catch (Exception ex)
-            {
-                return new Response<Project>($"An error occurred when saving the delete: {ex.Message}");
-            }
+            else return new Response<Project>($"You can't delete an active project! Project not deleted. ");
         }
 
         public async Task<Response<Project>> DeleteAsync(Project entity)
         {
-            try
-            {
-                using (var dbContext = new DbContextFactory().CreateDbContext(new string[] { }))
-                {
-                    var success =_repo.Remove(entity);
-                    await dbContext.SaveChangesAsync();
-                    return new Response<Project>(success);
-                }
-            }
-            catch (Exception ex)
-            {
-                return new Response<Project>($"An error occurred when saving the delete: {ex.Message}");
-            }
+            return await DeleteAsync(entity.Id);
         }
 
         public Task<bool> AnyAsync(long key)

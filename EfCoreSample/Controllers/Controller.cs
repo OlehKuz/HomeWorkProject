@@ -139,12 +139,11 @@ namespace EfCoreSample.Controllers
         /// <summary>
         /// Deletes a supplied Project.
         /// </summary>
-        [HttpDelete("{id}/project")]
-        public async Task<ActionResult> Delete(long id, ProjectPutDto projectDTO) 
+        [HttpDelete]
+        public async Task<ActionResult> Delete(ProjectPutDto projectDTO) 
         {
             //TODO it doesnt check if passed item content correstponds to item we deleted, checks only id
             if (projectDTO == null) return BadRequest("No entity provided");
-            if (!id.Equals(projectDTO.Id)) return BadRequest("Differing ids");
             if (!ModelState.IsValid) return BadRequest(ModelState.GetErrorMessages());
             var entity = _mapper.Map<Project>(projectDTO);
             var exists = await _dbService.AnyAsync(entity.Id);

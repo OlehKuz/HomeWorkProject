@@ -22,7 +22,7 @@ namespace EfCoreSample.Doman.Validators
                 "its Start date. ");
             RuleFor(project => project.LastUpdated)
                 .Must(BeAValidDate).WithMessage("DateTime format is required. ")
-                .GreaterThan(project => DateTime.UtcNow).WithMessage("Last update can't be done later than right now");
+                .LessThan(project => DateTime.UtcNow).WithMessage("Last update can't be done later than right now");
         }
         private bool BeAValidDate(DateTime date)
         {
