@@ -2,6 +2,7 @@
 using EfCoreSample.Doman.Abstraction;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -10,7 +11,7 @@ namespace EfCoreSample.Infrastructure.Abstraction
     public interface IRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
         Task<TEntity> FindAsync(TKey key);
-        Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate);
+        IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> predicate);
         Task<TEntity> InsertAsync(TEntity item);
         Task<bool> IsExistAsync(TKey key);
         void UpdateRange(IEnumerable<TEntity> items);

@@ -27,10 +27,9 @@ namespace EfCoreSample.Infrastructure.Repository
             
         }
 
-        public async Task<IEnumerable<Project>> GetAsync(Expression<Func<Project, bool>> expression)
+        public IQueryable<Project> Get(Expression<Func<Project, bool>> expression)
         {
-            return _context.Projects.Where(expression).AsEnumerable();
-                    
+            return _context.Projects.Where(expression);          
         }
 
         public async Task<Project> InsertAsync(Project item)

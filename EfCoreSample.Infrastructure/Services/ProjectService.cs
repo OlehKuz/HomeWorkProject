@@ -77,13 +77,10 @@ namespace EfCoreSample.Infrastructure.Services
         }
 
         public async Task<List<Project>> GetAsync(string sort,
-            int? pageNumber, int? pageSize, params string[] filter)
+            int? pageNumber, int? pageSize, string status, string title, string startTime, string endTime)
         {
-
-            IEnumerable <Project> projects = await _repo.GetAsync(i=>i.Description==null);
-            /*var paging = new Paging(projects);
-            paging.GetPaginatedResult(page, pageSize);
-            paging.GetSortedResult(sort);*/
+            if (status != null) _repo.Get(s=>s.Status==status.)
+            IEnumerable <Project> projects = 
             if(pageSize!=null || pageNumber != null)
             {
                 return PaginatedList<Project>.Create(projects, pageNumber ?? 1, pageSize ?? 2);
