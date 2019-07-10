@@ -37,7 +37,7 @@ namespace EfCoreSample.Controllers
         public async Task<ActionResult<List<ProjectDTO>>> Get(string sort, 
             int? pageNumber,  int? pageSize, string status, string title, string startTime, string endTime)
         {
-            var projects = await _dbService.GetAsync(sort, pageNumber, pageSize, 
+            var projects = _dbService.Get(sort, pageNumber, pageSize, 
                 status, title, startTime, endTime);
             return _mapper.Map<List<ProjectDTO>>(projects);
         }

@@ -76,11 +76,16 @@ namespace EfCoreSample.Infrastructure.Services
             return await _repo.FindAsync(key);
         }
 
-        public async Task<List<Project>> GetAsync(string sort,
+        public List<Project> Get(string sort,
             int? pageNumber, int? pageSize, string status, string title, string startTime, string endTime)
         {
-            if (status != null) _repo.Get(s=>s.Status==status.)
-            IEnumerable <Project> projects = 
+            IQueryable<Project> projects=_repo.Get(r=>true);
+            if (status != null) projects = _repo.Get(s => s.Status.Equals(status));
+            if (title != null) projects=_repo.Get(s => s.Title.Equals(title));
+            if (startTime != null) projects=_repo.Get(s => s.StartTime.Equals(startTime));
+            if (endTime != null) projects=_repo.Get(s => s.EndTime.Equals(endTime));
+
+            IEnumerable<Project> queried = projects.AsEnumerable();
             if(pageSize!=null || pageNumber != null)
             {
                 return PaginatedList<Project>.Create(projects, pageNumber ?? 1, pageSize ?? 2);

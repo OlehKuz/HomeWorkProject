@@ -17,8 +17,8 @@ namespace EfCoreSample.Infrastructure.Abstraction
     { 
         Task<TSource> FindAsync(TKey key);
 
-        Task<List<TSource>> GetAsync (string sort,
-            int? pageNumber, int? pageSize, params string[] filter);
+        List<TSource> Get(string sort,
+            int? pageNumber, int? pageSize, string status, string title, string startTime, string endTime);//params string[] filter); //
         Task<Response<TSource>> InsertAsync(TSource entity);
 
         Task<Response<TSource>>  UpdateRange(IEnumerable<TSource> entities);
