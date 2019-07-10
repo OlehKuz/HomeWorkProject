@@ -16,9 +16,9 @@ namespace EfCoreSample.Infrastructure.Abstraction
     public interface IService<TSource, TKey> where TSource : class
     { 
         Task<TSource> FindAsync(TKey key);
-
+        // Doesnt allow me to use "params string[]" instead of filtering params
         List<TSource> Get(string sort,
-            int? pageNumber, int? pageSize, string status, string title, string startTime, string endTime);//params string[] filter); //
+            int? pageNumber, int? pageSize,  string status, string title, string startTime, string endTime);
         Task<Response<TSource>> InsertAsync(TSource entity);
 
         Task<Response<TSource>>  UpdateRange(IEnumerable<TSource> entities);

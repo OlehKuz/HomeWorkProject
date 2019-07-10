@@ -79,14 +79,16 @@ namespace EfCoreSample.Infrastructure.Services
         public List<Project> Get(string sort,
             int? pageNumber, int? pageSize, string status, string title, string startTime, string endTime)
         {
-            IQueryable<Project> projects=_repo.Get(r=>true);
+            IQueryable<Project> projects = _repo.Get(r => true);
             if (status != null) projects = projects.Where(s => s.Status.Equals(status));
-            if (title != null) projects= projects.Where(s => s.Title.Equals(title));
+            if (title != null) projects = projects.Where(s => s.Title.Equals(title));
             if (startTime != null) projects = projects.Where(s => s.StartTime.CompareTo(startTime) == 0);
-            if (endTime != null) projects= projects.Where(s => s.EndTime.Date.CompareTo(endTime) == 0);
-
+            if (endTime != null) projects = projects.Where(s => s.EndTime.Date.CompareTo(endTime) == 0);
+            
             IEnumerable<Project> queried = projects.AsEnumerable();
-            if(pageSize!=null || pageNumber != null)
+            if(sort=="updateTime") queried.OrderByDescending(s => s.LastUpdated);
+            if(sort==null) queried.OrderBy(s => s.LastUpdated);
+            if (pageSize!=null || pageNumber != null)
             {
                 return PaginatedList<Project>.Create(projects, pageNumber ?? 1, pageSize ?? 2);
             }

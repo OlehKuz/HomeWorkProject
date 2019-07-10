@@ -34,7 +34,7 @@ namespace EfCoreSample.Controllers
 
         // GET api/Project
         [HttpGet]
-        public async Task<ActionResult<List<ProjectDTO>>> Get(string sort, 
+        public ActionResult<List<ProjectDTO>> Get(string sort, 
             int? pageNumber,  int? pageSize, string status, string title, string startTime, string endTime)
         {
             var projects = _dbService.Get(sort, pageNumber, pageSize, 
