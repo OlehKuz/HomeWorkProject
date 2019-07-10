@@ -1,5 +1,4 @@
-﻿using EfCoreSample.Doman.Entities;
-
+﻿
 namespace EfCoreSample.Doman.Communication
 {
     public class Response<TEntity> where TEntity:class

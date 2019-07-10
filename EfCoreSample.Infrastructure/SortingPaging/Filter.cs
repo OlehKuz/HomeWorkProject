@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using EfCoreSample.Doman;
 
 namespace EfCoreSample.Infrastructure.SortingPaging
 {
@@ -44,7 +42,5 @@ namespace EfCoreSample.Infrastructure.SortingPaging
             }
             return projects.ToList();
         }
-        
-
-}
+    }
 }

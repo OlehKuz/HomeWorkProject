@@ -23,20 +23,6 @@ namespace EfCoreSample.Persistance.EntityConfiguration
             employeeBuilder.Property(t => t.LastModified)
                 .HasDefaultValueSql("current_timestamp(6) ON UPDATE current_timestamp(6)")
                 .ValueGeneratedOnAddOrUpdate();
-
-            /*employeeBuilder.HasData(
-                new Employee()
-                {
-                    Id = 1,
-                    FirstName = "Petro",
-                    LastName = "Petrenko"             
-                },
-                new Employee()
-                {
-                    Id = 2,
-                    FirstName = "Olga",
-                    LastName = "Petrenko"                    
-                });*/
         }
     }
 }

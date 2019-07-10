@@ -24,24 +24,6 @@ namespace EfCoreSample.Persistance.EntityConfiguration
                 a.Country,
                 a.Street
             }).ForMySqlIsFullText();
-
-           /* addressBuilder.HasData(
-                new Address()
-                {
-                    Id = 1,
-                    Street = "Lvivs`ka",
-                    City = "Ternopil",
-                    Country = "Ukraine",
-                    EmployeeId = 1
-                },
-                new Address()
-                {
-                    Id = 2,
-                    Street = "Tarnavs`kogo",
-                    City = "Ternopil",
-                    Country = "Ukraine",
-                    EmployeeId = 2
-                });*/
         }
     }
 }

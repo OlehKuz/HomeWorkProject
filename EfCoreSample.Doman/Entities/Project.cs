@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using EfCoreSample.Doman.Abstraction;
-using EfCoreSample.Doman.DTO;
 
 namespace EfCoreSample.Doman.Entities
 {

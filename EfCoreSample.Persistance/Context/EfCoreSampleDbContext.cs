@@ -27,8 +27,6 @@ namespace EfCoreSample.Persistance
             builder.ApplyConfiguration(new EmployeeEntityConfiguration());
             builder.ApplyConfiguration(new EmployeeProjectEntityConfiguration());
             builder.ApplyConfiguration(new ProjectEntityConfiguration());
-        }
-
-       
+        }  
     }
 }

@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 
@@ -34,20 +33,6 @@ namespace EfCoreSample.Infrastructure.Repository
 
         public async Task<Project> InsertAsync(Project item)
         {
-            //TODO  check if entity w this id is already tracked
-
-            /*
-             if (buyer.IsTransient())
-            {
-                return _context.Buyers
-                    .Add(buyer)
-                    .Entity;
-            }
-            else
-            {
-                return buyer;
-            }           
-             */
             var added = _context.Projects.Add(item).Entity;
             _context.SaveChanges();
              return added;
@@ -59,22 +44,18 @@ namespace EfCoreSample.Infrastructure.Repository
         }
 
         public Project Update(Project item)
-        {
-            
+        { 
            var entity = _context.Projects.Find(item.Id);
            if (entity != null) _context.Entry(entity).State =
                             EntityState.Modified;
             _context.Entry(entity).CurrentValues.SetValues(item);
             _context.SaveChanges();
-            return entity;
-                 
+            return entity;                 
         }
 
         public void UpdateRange(IEnumerable<Project> items)
         {
-
             var itemsKeys = items.Select(i => i.Id);
-
             var searchedProjects = _context.Projects.Where(p => itemsKeys.Contains(p.Id));
             _context.Projects.UpdateRange(searchedProjects);
             foreach (var project in searchedProjects)
@@ -82,7 +63,6 @@ namespace EfCoreSample.Infrastructure.Repository
                 _context.Entry(project).CurrentValues.SetValues(items.Single(i=>i.Id.Equals(project.Id)));
             }
             _context.SaveChanges();
-
         }
 
         public bool Remove(Project item)

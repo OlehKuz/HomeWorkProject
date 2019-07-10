@@ -8,7 +8,6 @@ using EfCoreSample.Infrastructure.Abstraction;
 using AutoMapper;
 using EfCoreSample.Doman.DTO;
 using EfCoreSample.Doman.Communication;
-using EfCoreSample.Infrastructure.Services.Communication;
 using EfCoreSample.Doman;
 using EfCoreSample.Infrastructure.SortingPaging;
 using System.Linq;

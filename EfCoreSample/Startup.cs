@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using EfCoreSample.Infrastructure;
 using AutoMapper;
 using Microsoft.OpenApi.Models;
@@ -15,8 +14,6 @@ using EfCoreSample.Infrastructure.Repository;
 using EfCoreSample.Doman.Entities;
 using EfCoreSample.Infrastructure.Services;
 using EfCoreSample.Doman;
-using EfCoreSample.Doman.DTO;
-using EfCoreSample.Infrastructure.Extensions;
 using System;
 using System.Reflection;
 using FluentValidation.AspNetCore;
@@ -84,8 +81,7 @@ namespace EfCoreSample
 
             app.UseMvc();
             app.EnsureContextMigrated<EfCoreSampleDbContext>();
-            //TODO change this seed method, remove EfCoreSampleDbContext from configure method
-            SeedDb.Initialize(context);//ContextSeed.SeedAsync(app).Wait();
+            SeedDb.Initialize(context);
         }
     }
 }

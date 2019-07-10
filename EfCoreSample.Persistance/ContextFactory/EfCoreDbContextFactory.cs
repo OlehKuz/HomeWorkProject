@@ -21,6 +21,5 @@ namespace EfCoreSample.Persistance
 
             return new EfCoreSampleDbContext(optionsBuilder.Options);
         }
-
     }
 }

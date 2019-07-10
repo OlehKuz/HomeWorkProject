@@ -5,14 +5,10 @@ using EfCoreSample.Doman.Entities;
 using EfCoreSample.Infrastructure.Abstraction;
 using EfCoreSample.Infrastructure.Extensions;
 using EfCoreSample.Infrastructure.SortingPaging;
-using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace EfCoreSample.Controllers
@@ -33,8 +29,7 @@ namespace EfCoreSample.Controllers
             _link = link;
             _mapper = mapper;
         }
-
-        // GET api/Project
+      
         [HttpGet]
         public ActionResult<List<ProjectGetDto>> Get(string sort,  int? pageSize, int? pageNumber,
                     string status, string title, string startTime, string endTime)
@@ -54,33 +49,16 @@ namespace EfCoreSample.Controllers
             return _mapper.Map<ProjectGetDto>(entity);
         }
 
-        /// <summary>
-        /// Retrieves Employees that are Members of selected project
-        /// </summary>
+
         [HttpGet("{id}/members")]
         public ActionResult<List<EmployeeDTO>> Get(long id, bool members = true)
         {    
             var entity = _dbService.GetRelated<Employee>(id);
             if (entity == null) return NotFound();
             return _mapper.Map<List<EmployeeDTO>>(entity);
-
         }
 
-        /// <remarks>
-        /// Sample request:
-        ///
-        ///     POST api/Project
-        ///     "title": "Title post project",
-        ///     "status": "Pending",
-        ///     "lastUpdated": "2019-07-09",
-        ///     "startTime": "2019-07-06",
-        ///     "endTime": "2019-08-25"
-        ///
-        /// </remarks>
-        /// 
-        /// <returns>A newly created Project</returns>
-        /// <response code="201">Returns the newly created project</response>
-        /// <response code="400">If the item is null</response> 
+
         [HttpPost]
         public async Task<ActionResult<ProjectGetDto>> Post(ProjectPostDto saveDto)
         {
@@ -94,7 +72,6 @@ namespace EfCoreSample.Controllers
         }
 
 
-        // PUT api/Project/5
         [HttpPut("{id:long}")]
         public async Task<ActionResult> Put(long id, ProjectPutDto projectDTO)
         {
@@ -108,8 +85,8 @@ namespace EfCoreSample.Controllers
             if (!result.Success) return StatusCode(StatusCodes.Status500InternalServerError, result.Message);
             return NoContent();
         }
-        //TODO no validation at all
-        // PUT api/Project/5
+
+
         [HttpPut]
         public async Task<ActionResult> Put(List<ProjectPutDto> projectDTO)
         {
@@ -122,10 +99,6 @@ namespace EfCoreSample.Controllers
             return NoContent();
         }
 
-        /// <summary>
-        /// Deletes a specific Project.
-        /// </summary>
-        /// <param name="id"></param>
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(long id)
         {  
@@ -136,9 +109,7 @@ namespace EfCoreSample.Controllers
             return NoContent();
         }
 
-        /// <summary>
-        /// Deletes a supplied Project.
-        /// </summary>
+
         [HttpDelete]
         public async Task<ActionResult> Delete(ProjectPutDto projectDTO) 
         {

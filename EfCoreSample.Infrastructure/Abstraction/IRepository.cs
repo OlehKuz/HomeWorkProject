@@ -1,4 +1,4 @@
-﻿using EfCoreSample.Doman;
+﻿
 using EfCoreSample.Doman.Abstraction;
 using System;
 using System.Collections.Generic;

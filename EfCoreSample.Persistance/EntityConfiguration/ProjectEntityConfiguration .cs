@@ -23,7 +23,6 @@ namespace EfCoreSample.Persistance.EntityConfiguration
                 .HasDefaultValueSql("current_timestamp(6) ON UPDATE current_timestamp(6)")
                 .ValueGeneratedOnAddOrUpdate();
             projectBuilder.Property(p => p.StartTime).IsRequired();
-
         }
     }
 }
