@@ -4,6 +4,7 @@ using EfCoreSample.Doman.DTO;
 using EfCoreSample.Doman.Entities;
 using EfCoreSample.Infrastructure.Abstraction;
 using EfCoreSample.Infrastructure.Extensions;
+using EfCoreSample.Infrastructure.SortingPaging;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,12 +36,12 @@ namespace EfCoreSample.Controllers
 
         // GET api/Project
         [HttpGet]
-        public ActionResult<List<ProjectGetDto>> Get(string sort, 
-            int? pageNumber,  int? pageSize, string status, string title, string startTime, string endTime)
+        public ActionResult<List<ProjectGetDto>> Get(string sort,  int? pageSize, int? pageNumber,
+                    string status, string title, string startTime, string endTime)
         {
-            
-            var projects = _dbService.Get(sort, pageNumber, pageSize, 
-                status, title, startTime, endTime);
+            IEnumerable<Project> projects = _dbService.Get(status, title, startTime, endTime);
+            projects.GetSorted(sort);
+            projects = projects.GetPaginated(pageSize, pageNumber);
             return _mapper.Map<List<ProjectGetDto>>(projects);
         }
 

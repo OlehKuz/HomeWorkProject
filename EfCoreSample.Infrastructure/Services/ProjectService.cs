@@ -20,7 +20,7 @@ namespace EfCoreSample.Infrastructure.Services
     public class ProjectService : IService<Project,long>
     {
         private readonly IRepository<Project, long> _repo;
-        public ProjectService(IRepository<Project, long> repo)//,  IUnitOfWork unitOfWork)
+        public ProjectService(IRepository<Project, long> repo)
         {
             _repo = repo;    
         }
@@ -75,21 +75,11 @@ namespace EfCoreSample.Infrastructure.Services
             return await _repo.FindAsync(key);
         }
 
-        public List<Project> Get(string sort,
-            int? pageNumber, int? pageSize, string status, string title, string startTime, string endTime)
+
+        public IEnumerable<Project> Get(string status, string title, string startTime, string endTime)
         {
             IQueryable<Project> projects = _repo.Get(r => true);
-            IEnumerable<Project> queried = Filter.GetFiltered(projects, status, title, startTime, endTime);
-            
-            if(sort=="updateTime") queried.OrderByDescending(s => s.LastUpdated);
-            if(sort==null) queried.OrderBy(s => s.LastUpdated);
-            if (pageSize!=null || pageNumber != null)
-            {
-                return PaginatedList<Project>.Create(queried, pageNumber ?? 1, pageSize ?? 2);
-            }
-            return queried.ToList();    
-            
-            
+            return Filter.GetFiltered(projects, status, title, startTime, endTime).AsEnumerable();
         }
 
         public async Task<Response<Project>> UpdateRange(IEnumerable<Project> entities)
