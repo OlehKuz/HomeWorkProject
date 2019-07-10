@@ -38,6 +38,7 @@ namespace EfCoreSample.Controllers
         public ActionResult<List<ProjectGetDto>> Get(string sort, 
             int? pageNumber,  int? pageSize, string status, string title, string startTime, string endTime)
         {
+            
             var projects = _dbService.Get(sort, pageNumber, pageSize, 
                 status, title, startTime, endTime);
             return _mapper.Map<List<ProjectGetDto>>(projects);
@@ -88,7 +89,7 @@ namespace EfCoreSample.Controllers
             var result = await _dbService.InsertAsync(entity);
             if(!result.Success)return StatusCode(StatusCodes.Status500InternalServerError,result.Message);
             var posted = result.Entity;
-            return Created(_link.GetPathByAction("Get", "Project", new { posted.Id }), posted);
+            return Created(_link.GetPathByAction("Get", "Project", new { posted.Id }), saveDto);
         }
 
 
@@ -99,7 +100,6 @@ namespace EfCoreSample.Controllers
             if (projectDTO == null) return BadRequest("No entity provided");
             if (!id.Equals(projectDTO.Id)) return BadRequest("Differing ids");
             if (!ModelState.IsValid) return BadRequest(ModelState.GetErrorMessages());
-            //Look for item in service
             var exists = await _dbService.AnyAsync(id);
             if (!exists) return NotFound();
             var entity = _mapper.Map<Project>(projectDTO);
@@ -128,7 +128,6 @@ namespace EfCoreSample.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(long id)
         {  
-            // any async in service call
             var exists = await _dbService.AnyAsync(id);
             if (!exists) return NotFound();
             var result = await _dbService.DeleteAsync(id);
@@ -146,7 +145,6 @@ namespace EfCoreSample.Controllers
             if (projectDTO == null) return BadRequest("No entity provided");
             if (!id.Equals(projectDTO.Id)) return BadRequest("Differing ids");
             if (!ModelState.IsValid) return BadRequest(ModelState.GetErrorMessages());
-            //exists is done in service
             var entity = _mapper.Map<Project>(projectDTO);
             var exists = await _dbService.AnyAsync(entity.Id);
             if (!exists) return NotFound();           

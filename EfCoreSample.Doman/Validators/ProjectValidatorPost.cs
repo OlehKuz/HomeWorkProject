@@ -12,7 +12,6 @@ namespace EfCoreSample.Doman.Validators
         {
             RuleFor(project => project.Status).IsInEnum().NotNull().WithMessage("Project status can be " +
                  "either Pending, InProgress, Completed or Cancelled. Plz type in your status. ");
-
         }
     }
 }

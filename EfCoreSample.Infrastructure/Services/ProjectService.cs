@@ -12,50 +12,49 @@ using EfCoreSample.Infrastructure.Services.Communication;
 using EfCoreSample.Doman;
 using EfCoreSample.Infrastructure.SortingPaging;
 using System.Linq;
+using EfCoreSample.Persistance;
+using System.Transactions;
 
 namespace EfCoreSample.Infrastructure.Services
 {
     public class ProjectService : IService<Project,long>
     {
         private readonly IRepository<Project, long> _repo;
-
-       
-       // private readonly IUnitOfWork _unitOfWork;
-
         public ProjectService(IRepository<Project, long> repo)//,  IUnitOfWork unitOfWork)
         {
             _repo = repo;    
-            //_unitOfWork = unitOfWork;
         }
-        public async Task<bool> AnyAsync(long key)
-        {
-            return await _repo.IsExistAsync(key);
-        }
+
         public async Task<Response<Project>> InsertAsync(Project entity)
         {
             try
             {
-                await _repo.InsertAsync(entity);
-                //await _unitOfWork.CompleteAsync();
-                return new Response<Project>(entity);
+                using (var dbContext = new DbContextFactory().CreateDbContext(new string[] { }))
+                {
+                     var inserted = await _repo.InsertAsync(entity);
+                     await dbContext.SaveChangesAsync();
+                     return new Response<Project>(inserted);
+                }
             }
             catch (Exception ex)
             {
-                // Do some logging stuff
                 return new Response<Project>($"An error occurred when saving the project: {ex.Message}");
             }
         }
+
+
         public async Task<Response<Project>> Update(Project entity)
         {
-            try
-            {
-                _repo.Update(entity);
-                //await _unitOfWork.CompleteAsync();
-                return new Response<Project>(entity);
+            try{
+                using (var dbContext = new DbContextFactory().CreateDbContext(new string[] { }))
+                {
+                    var updated = _repo.Update(entity);
+                    await dbContext.SaveChangesAsync();
+                    return new Response<Project>(updated);
+                }
             }
             catch (Exception ex)
             {
-                // Do some logging stuff
                 return new Response<Project>($"An error occurred when updating the project: {ex.Message}");
             }
         }
@@ -80,17 +79,13 @@ namespace EfCoreSample.Infrastructure.Services
             int? pageNumber, int? pageSize, string status, string title, string startTime, string endTime)
         {
             IQueryable<Project> projects = _repo.Get(r => true);
-            if (status != null) projects = projects.Where(s => s.Status.Equals(status));
-            if (title != null) projects = projects.Where(s => s.Title.Equals(title));
-            if (startTime != null) projects = projects.Where(s => s.StartTime.CompareTo(startTime) == 0);
-            if (endTime != null) projects = projects.Where(s => s.EndTime.Date.CompareTo(endTime) == 0);
+            IEnumerable<Project> queried = Filter.GetFiltered(projects, status, title, startTime, endTime);
             
-            IEnumerable<Project> queried = projects.AsEnumerable();
             if(sort=="updateTime") queried.OrderByDescending(s => s.LastUpdated);
             if(sort==null) queried.OrderBy(s => s.LastUpdated);
             if (pageSize!=null || pageNumber != null)
             {
-                return PaginatedList<Project>.Create(projects, pageNumber ?? 1, pageSize ?? 2);
+                return PaginatedList<Project>.Create(queried, pageNumber ?? 1, pageSize ?? 2);
             }
             return queried.ToList();    
             
@@ -116,13 +111,15 @@ namespace EfCoreSample.Infrastructure.Services
         {
             try
             {
-                _repo.Remove(key);
-               // await _unitOfWork.CompleteAsync();
-                return new Response<Project>(new Project());
+                using (var dbContext = new DbContextFactory().CreateDbContext(new string[] { }))
+                {
+                    var success =_repo.Remove(key);
+                    await dbContext.SaveChangesAsync();
+                    return new Response<Project>(success);
+                }
             }
             catch (Exception ex)
             {
-                // Do some logging stuff
                 return new Response<Project>($"An error occurred when saving the delete: {ex.Message}");
             }
         }
@@ -131,15 +128,22 @@ namespace EfCoreSample.Infrastructure.Services
         {
             try
             {
-                _repo.Remove(entity);
-               // await _unitOfWork.CompleteAsync();
-                return new Response<Project>(entity);
+                using (var dbContext = new DbContextFactory().CreateDbContext(new string[] { }))
+                {
+                    var success =_repo.Remove(entity);
+                    await dbContext.SaveChangesAsync();
+                    return new Response<Project>(success);
+                }
             }
             catch (Exception ex)
             {
-                // Do some logging stuff
                 return new Response<Project>($"An error occurred when saving the delete: {ex.Message}");
             }
+        }
+
+        public Task<bool> AnyAsync(long key)
+        {
+            return _repo.IsExistAsync(key);
         }
     }
 }

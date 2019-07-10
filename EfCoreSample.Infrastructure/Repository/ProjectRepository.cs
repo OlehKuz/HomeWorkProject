@@ -50,8 +50,7 @@ namespace EfCoreSample.Infrastructure.Repository
              */
             var added = _context.Projects.Add(item).Entity;
             _context.SaveChanges();
-            return added;
-
+             return added;
         }
 
         public async Task<bool> IsExistAsync(long key)

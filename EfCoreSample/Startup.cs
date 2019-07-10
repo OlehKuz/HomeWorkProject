@@ -51,11 +51,11 @@ namespace EfCoreSample
                     .RunDefaultMvcValidationAfterFluentValidationExecutes = false);
 
 
-            services.AddDbContext<EfCoreSampleDbContext>(options =>
-                options.UseMySql(Configuration["ConnectionStrings:LocalConnection"]));
+            services.AddDbContext<EfCoreSampleDbContext>((serviceprovider, builder) =>
+                builder.UseMySql(Configuration["ConnectionStrings:LocalConnection"]));
             services.AddScoped<IRepository<Project, long>, ProjectRepository>();
             services.AddScoped<IService<Project, long>, ProjectService>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+           
             services.AddAutoMapper(typeof(Startup), typeof(Project), typeof(Employee), typeof(EmployeeProject));
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);

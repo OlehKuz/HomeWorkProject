@@ -15,6 +15,7 @@ namespace EfCoreSample.Doman.Communication
             Entity = project;
         }
         public Response(TEntity entity) : this(true, string.Empty, entity) { }
+        public Response(bool success) : this(success, string.Empty, null) { }
 
         /// Creates am error response.
         public Response(string message) : this(false, message, null) { }

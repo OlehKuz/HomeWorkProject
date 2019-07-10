@@ -6,14 +6,14 @@ using System.IO;
 
 namespace EfCoreSample.Persistance
 {
-    public class EfCoreDbContextFactory : IDesignTimeDbContextFactory<EfCoreSampleDbContext>
+    public class DbContextFactory : IDesignTimeDbContextFactory<EfCoreSampleDbContext>
     {
         public EfCoreSampleDbContext CreateDbContext(string[] args)
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional:true)
-                .AddUserSecrets<EfCoreDbContextFactory>()
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddUserSecrets<DbContextFactory>()
                 .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<EfCoreSampleDbContext>();
