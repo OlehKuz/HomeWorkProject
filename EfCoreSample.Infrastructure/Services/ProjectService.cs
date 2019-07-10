@@ -10,6 +10,8 @@ using EfCoreSample.Doman.DTO;
 using EfCoreSample.Doman.Communication;
 using EfCoreSample.Infrastructure.Services.Communication;
 using EfCoreSample.Doman;
+using EfCoreSample.Infrastructure.SortingPaging;
+using System.Linq;
 
 namespace EfCoreSample.Infrastructure.Services
 {
@@ -74,13 +76,21 @@ namespace EfCoreSample.Infrastructure.Services
             return await _repo.FindAsync(key);
         }
 
-        public async Task<List<Project>> GetAsync(Expression<Func<Project, bool>> expression)
+        public async Task<List<Project>> GetAsync(string sort,
+            int? pageNumber, int? pageSize, params string[] filter)
         {
 
-            IEnumerable <Project> projects = await _repo.GetAsync(expression);
-            List<Project> p = new List<Project>();
-            foreach (var project in projects) p.Add(project);
-            return p;
+            IEnumerable <Project> projects = await _repo.GetAsync(i=>i.Description==null);
+            /*var paging = new Paging(projects);
+            paging.GetPaginatedResult(page, pageSize);
+            paging.GetSortedResult(sort);*/
+            if(pageSize!=null || pageNumber != null)
+            {
+                return PaginatedList<Project>.Create(projects, pageNumber ?? 1, pageSize ?? 2);
+            }
+            return projects.ToList();    
+            
+            
         }
 
         public async Task<Response<Project>> UpdateRange(IEnumerable<Project> entities)

@@ -34,18 +34,12 @@ namespace EfCoreSample.Controllers
 
         // GET api/Project
         [HttpGet]
-        public async Task<ActionResult<List<ProjectDTO>>> Get()
+        public async Task<ActionResult<List<ProjectDTO>>> Get(string sort, 
+            int? pageNumber,  int? pageSize)//, params string[] filter
         {
-            try
-            {
-                var projects= await _dbService.GetAsync(p=>p.Id==2);
-                return _mapper.Map<List<ProjectDTO>>(projects);
-            }
-            catch
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                "Database Failure");
-            }
+           
+            var projects= await _dbService.GetAsync(sort, pageNumber, pageSize);//,filter
+            return _mapper.Map<List<ProjectDTO>>(projects);
         }
 
 
