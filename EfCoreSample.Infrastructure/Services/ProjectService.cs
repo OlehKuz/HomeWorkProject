@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using EfCoreSample.Doman.Entities;
 using EfCoreSample.Infrastructure.Abstraction;
-using AutoMapper;
 using EfCoreSample.Doman.DTO;
 using EfCoreSample.Doman.Communication;
 using EfCoreSample.Doman;
 using EfCoreSample.Infrastructure.SortingPaging;
 using System.Linq;
 using EfCoreSample.Persistance;
-using System.Transactions;
 
 namespace EfCoreSample.Infrastructure.Services
 {
@@ -79,29 +75,6 @@ namespace EfCoreSample.Infrastructure.Services
         {
             IQueryable<Project> projects = _repo.Get(r => true);
             return Filter.GetFiltered(projects, status, title, startTime, endTime).AsEnumerable();
-        }
-
-        public async Task<Response<Project>> UpdateRange(IEnumerable<Project> entities)
-        {
-            foreach (var e in entities) {
-                if (!await _repo.IsExistAsync(e.Id))  return new Response<Project>
-                        ($"Entity with id {e.Id} doesn't exist. No projects were updated. ");
-            }
-            try
-            {
-                using (var dbContext = new DbContextFactory().CreateDbContext(new string[] { }))
-                {
-                    _repo.UpdateRange(entities);
-
-                    // await _unitOfWork.CompleteAsync();
-                    return new Response<Project>(new Project());
-                }
-            }
-            catch (Exception ex)
-            {
-                // Do some logging stuff
-                return new Response<Project>($"An error occurred when updating the project: {ex.Message}");
-            }
         }
 
         public async Task<Response<Project>> DeleteAsync(long key)

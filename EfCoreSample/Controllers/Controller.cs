@@ -86,19 +86,6 @@ namespace EfCoreSample.Controllers
             return NoContent();
         }
 
-
-        [HttpPut]
-        public async Task<ActionResult> Put(List<ProjectPutDto> projectDTO)
-        {
-            //TODO Validation
-            if (projectDTO == null) return BadRequest("No entity provided");
-            
-            var entity = _mapper.Map<List<Project>>(projectDTO);
-            var result = await _dbService.UpdateRange(entity);
-            if (!result.Success) return StatusCode(StatusCodes.Status500InternalServerError, result.Message);
-            return NoContent();
-        }
-
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(long id)
         {  
@@ -113,7 +100,7 @@ namespace EfCoreSample.Controllers
         [HttpDelete]
         public async Task<ActionResult> Delete(ProjectPutDto projectDTO) 
         {
-            //TODO it doesnt check if passed item content correstponds to item we deleted, checks only id
+            
             if (projectDTO == null) return BadRequest("No entity provided");
             if (!ModelState.IsValid) return BadRequest(ModelState.GetErrorMessages());
             var entity = _mapper.Map<Project>(projectDTO);

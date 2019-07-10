@@ -10,7 +10,6 @@ namespace EfCoreSample.Infrastructure.Abstraction
         Task<TSource> FindAsync(TKey key);
         IEnumerable<TSource> Get(string filter1, string filter2, string filter3, string filter4);
         Task<Response<TSource>> InsertAsync(TSource entity);
-        Task<Response<TSource>>  UpdateRange(IEnumerable<TSource> entities);
         Task<Response<TSource>> Update(TSource entity);
         Task<Response<TSource>> DeleteAsync(TKey key);
         Task<Response<TSource>> DeleteAsync(TSource entity);
