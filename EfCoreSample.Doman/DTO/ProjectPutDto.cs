@@ -5,9 +5,11 @@ using System.Text;
 
 namespace EfCoreSample.Doman.DTO
 {
-    public class ProjectPostDto : ProjectDtoBase
+    public class ProjectPutDto : ProjectDtoBase
     {
-        public EProjectStatus? Status { get; set; }
+        public long Id { get; set; }
         
+        public EProjectStatus? Status { get; set; }     
+       
     }
 }

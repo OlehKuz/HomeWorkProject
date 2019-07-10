@@ -6,8 +6,7 @@ using System.Text;
 namespace EfCoreSample.Doman.DTO
 {
     public enum EProjectStatus
-    {
-        None,
+    {       
         [Description("Pending")]
         Pending,
         [Description("InProgress")]

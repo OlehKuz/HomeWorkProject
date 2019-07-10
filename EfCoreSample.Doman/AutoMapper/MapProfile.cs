@@ -9,19 +9,17 @@ namespace EfCoreSample.Doman.AutoMapper
     {
         public MapProfile()
         {
-            CreateMap<ProjectDTO, Project>()
+            CreateMap<ProjectPutDto, Project>()
                     .ForMember(dest => dest.Status,
                         src => src.MapFrom(s => EnumExtention.GetDescriptionFromEnumValue(s.Status)));
-            CreateMap<Project, ProjectDTO>()
+            CreateMap<Project, ProjectPutDto>()
                     .ForMember(dest => dest.Status,
                         src => src.MapFrom(s => EnumExtention.GetEnumValueFromDescription<EProjectStatus>(s.Status)));
 
-            CreateMap<SaveProjectDTO, Project>()
+            CreateMap<ProjectPostDto, Project>()
                     .ForMember(dest => dest.Status,
                         src => src.MapFrom(s => EnumExtention.GetDescriptionFromEnumValue(s.Status)));
-            CreateMap<Project, SaveProjectDTO>()
-                    .ForMember(dest => dest.Status,
-                        src => src.MapFrom(s => EnumExtention.GetEnumValueFromDescription<EProjectStatus>(s.Status)));
+            CreateMap<Project, ProjectGetDto>();
 
             CreateMap<Employee, EmployeeDTO>();
             CreateMap<EmployeeDTO, Employee>();

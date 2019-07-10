@@ -34,21 +34,21 @@ namespace EfCoreSample.Controllers
 
         // GET api/Project
         [HttpGet]
-        public ActionResult<List<ProjectDTO>> Get(string sort, 
+        public ActionResult<List<ProjectGetDto>> Get(string sort, 
             int? pageNumber,  int? pageSize, string status, string title, string startTime, string endTime)
         {
             var projects = _dbService.Get(sort, pageNumber, pageSize, 
                 status, title, startTime, endTime);
-            return _mapper.Map<List<ProjectDTO>>(projects);
+            return _mapper.Map<List<ProjectGetDto>>(projects);
         }
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProjectDTO>> Get(long id)
+        public async Task<ActionResult<ProjectGetDto>> Get(long id)
         {
             var entity = await _dbService.FindAsync(id);
             if (entity == null) return NotFound();
-            return _mapper.Map<ProjectDTO>(entity);
+            return _mapper.Map<ProjectGetDto>(entity);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace EfCoreSample.Controllers
         /// <response code="201">Returns the newly created project</response>
         /// <response code="400">If the item is null</response> 
         [HttpPost]
-        public async Task<ActionResult<ProjectDTO>> Post(SaveProjectDTO saveDto)
+        public async Task<ActionResult<ProjectGetDto>> Post(ProjectPostDto saveDto)
         {
             if (saveDto == null) return BadRequest("No entity provided");
             if (!ModelState.IsValid)
@@ -94,7 +94,7 @@ namespace EfCoreSample.Controllers
 
         // PUT api/Project/5
         [HttpPut("{id:long}")]
-        public async Task<ActionResult> Put(long id, ProjectDTO projectDTO)
+        public async Task<ActionResult> Put(long id, ProjectPutDto projectDTO)
         {
             if (projectDTO == null) return BadRequest("No entity provided");
             if (!id.Equals(projectDTO.Id)) return BadRequest("Differing ids");
@@ -109,7 +109,7 @@ namespace EfCoreSample.Controllers
 
         // PUT api/Project/5
         [HttpPut]
-        public async Task<ActionResult> Put(List<ProjectDTO> projectDTO)
+        public async Task<ActionResult> Put(List<ProjectPutDto> projectDTO)
         {
             //TODO Validation
             if (projectDTO == null) return BadRequest("No entity provided");
@@ -138,7 +138,7 @@ namespace EfCoreSample.Controllers
         /// Deletes a supplied Project.
         /// </summary>
         [HttpDelete("{id}/project")]
-        public async Task<ActionResult> Delete(long id, ProjectDTO projectDTO) 
+        public async Task<ActionResult> Delete(long id, ProjectPutDto projectDTO) 
         {
             //TODO it doesnt check if passed item content correstponds to item we deleted, checks only id
             if (projectDTO == null) return BadRequest("No entity provided");
