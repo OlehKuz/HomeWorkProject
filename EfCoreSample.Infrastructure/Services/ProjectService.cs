@@ -83,11 +83,19 @@ namespace EfCoreSample.Infrastructure.Services
 
         public async Task<Response<Project>> UpdateRange(IEnumerable<Project> entities)
         {
+            foreach (var e in entities) {
+                if (!await _repo.IsExistAsync(e.Id))  return new Response<Project>
+                        ($"Entity with id {e.Id} doesn't exist. No projects were updated. ");
+            }
             try
             {
-                _repo.UpdateRange(entities);
-               // await _unitOfWork.CompleteAsync();
-                return new Response<Project>(new Project());
+                using (var dbContext = new DbContextFactory().CreateDbContext(new string[] { }))
+                {
+                    _repo.UpdateRange(entities);
+
+                    // await _unitOfWork.CompleteAsync();
+                    return new Response<Project>(new Project());
+                }
             }
             catch (Exception ex)
             {

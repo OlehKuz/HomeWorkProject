@@ -34,7 +34,7 @@ namespace EfCoreSample.Infrastructure.Repository
         public async Task<Project> InsertAsync(Project item)
         {
             var added = _context.Projects.Add(item).Entity;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
              return added;
         }
 
